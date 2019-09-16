@@ -6,6 +6,8 @@ import android.os.SystemClock;
 import com.wwh.rxjavademo.IAreaDeviceView;
 import com.wwh.rxjavademo.Utils.AllUitls;
 import com.wwh.rxjavademo.Utils.AreaDeviceBean;
+import com.wwh.rxjavademo.protocol.ControlInstruction;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -115,19 +117,8 @@ public class AreaDevicePresent {
             try {
                 // 创建Socket对象 & 指定服务端的IP 及 端口号
                 Socket s = new Socket(areaDeviceBean.getIp(), 8888);
-//                s = new Socket(areaDeviceBean.getIp(), 8888);
-                // 创建一个InputStream用户读取要发送的文件。
-                InputStream inputStream = new FileInputStream("e://a.txt");
-                // 获取Socket的OutputStream对象用于发送数据。
                 OutputStream outputStream = s.getOutputStream();
-                // 创建一个byte类型的buffer字节数组，用于存放读取的本地文件
-                byte buffer[] = new byte[4 * 1024];
-                int temp = 0;
-                // 循环读取文件
-                while ((temp = inputStream.read(buffer)) != -1) {
-                    // 把数据写入到OuputStream对象中
-                    outputStream.write(buffer, 0, temp);
-                }
+                outputStream.write(ControlInstruction.OpenDevice());
                 // 发送读取的数据到服务端
                 outputStream.flush();
             } catch (IOException e) {
